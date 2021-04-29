@@ -7,22 +7,29 @@ end
 RM(I::Real, U::Real) = RM(float(I), float(U))
 const ± = RM
 
+
 struct Medicao{T<:AbstractFloat}
     RM::RM{T}
-    v::Union{Int, T}
+    v::Union{T, Int}
 
-    function Medicao(RM::RM{T}, v::Union{Int, T}) where {T<:AbstractFloat}
-    
-        if v isa Int
-            return new{T}(RM, v)
+    function Medicao{T}(RM::RM{T}, v::Union{T, Int}) where {T<:AbstractFloat}
+
+        if v < 1
+            throw(ArgumentError("Não é possível criar um objeto Medicao com v < 1"))
         end
-        
-        if isinf(v)
-            return new{T}(RM, v)
-        end
-        
-        return new{T}(RM, trunc(Int, v))
+
+        return new{T}(RM, v)
     end
+end
+
+Medicao(RM::RM{T}, v::Int) where {T<:AbstractFloat} = Medicao{T}(RM, v)
+function Medicao(RM::RM{T}, v::T) where {T<:AbstractFloat}
+    
+    if isinf(v)
+        return Medicao{T}(RM, v)
+    end
+    
+    return Medicao{T}(RM, trunc(Int, v))
 end
 
 

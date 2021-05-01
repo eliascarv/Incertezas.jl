@@ -15,7 +15,7 @@ struct Medicao{T<:AbstractFloat}
     function Medicao{T}(RM::RM{T}, v::Union{T, Int}) where {T<:AbstractFloat}
 
         if v < 1
-            throw(ArgumentError("Não é possível criar um objeto Medicao com v < 1"))
+            throw(ArgumentError("Não é possível criar um objeto Medicao com v < 1."))
         end
 
         return new{T}(RM, v)
@@ -23,13 +23,13 @@ struct Medicao{T<:AbstractFloat}
 end
 
 Medicao(RM::RM{T}, v::Int) where {T<:AbstractFloat} = Medicao{T}(RM, v)
-function Medicao(RM::RM{T}, v::T) where {T<:AbstractFloat}
+function Medicao(RM::RM{T}, v::AbstractFloat) where {T<:AbstractFloat}
     
     if isinf(v)
         return Medicao{T}(RM, v)
     end
     
-    return Medicao{T}(RM, trunc(Int, v))
+    return Medicao(RM, trunc(Int, v))
 end
 
 

@@ -6,6 +6,34 @@ student(v::Union{Int, Float64}, prob::Float64 = 0.9545) = quantile(TDist(v), 1 -
 
 student(med::Medicao, prob::Float64 = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
 
+function incerteza(I::Vector, prob::Float64 = 0.9545)
+    v = length(I) - 1
+    u = std(I)
+    t = student(v, prob)
+    U = u * t
+    return U
+end
+
+function incerteza(I::Matrix, prob::Float64 = 0.9545)
+    v = size(I)[1]
+    u = [std(I[:, i]) for i in axes(I, 2)]
+    t = student(v, prob)
+    U = u * t
+    return U
+end
+
+function correcao(I::Vector, VV::Real)
+    I̅ = mean(I)
+    C = -(I̅ - VV)
+    return C
+end
+
+function correcao(I::Matrix, VV::Vector)
+    I̅ = [mean(I[:, i]) for i in axes(I, 2)]
+    C = -(I̅ - VV)
+    return C
+end
+
 function medinvar(I::Vector; C::Real = 0, prob::Float64 = 0.9545)
 
     I̅ = mean(I)

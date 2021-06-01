@@ -71,7 +71,7 @@ Exemplo:
 julia> student(4)
 2.8693151696963826
 ```
-#### `mens_nvar()`
+#### `mens_invar()`
 A função `mens_invar` é usada para calcular o resultado de medição de um mensurando invariável. Neste caso duas situações podem ocorrer: `n = 1` e `n > 1`.\
 Para `n = 1` a equação para se chegar ao resultado de medição é a seguinte: `RM = I + C ± U`. Vale ressaltar que a incerteza de medição `U` é igual ao produto da incerteza padrão (desvio padrão) `u` multiplicado pelo coeficiente de Student `t`. No caso de apenas uma medição a incerteza de medição deve ser previamente conhecida.\
 No segundo caso, o resultado de medição é calculado pela seguida equação: `RM = I̅ + C  ± U/√n`. Em que I̅ é igual a média das medições realizadas.\

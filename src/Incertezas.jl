@@ -1,11 +1,11 @@
-
 module Incertezas
 
+using Base: Integer, AbstractFloat, NamedTuple
 using Distributions
 
 export RM, Medicao, ± 
-export medinvar, medinvar_emax
-export medvar, medvar_emax
+export mens_invar, mens_invar_emax
+export mens_var, mens_var_emax
 export student, incerteza, correcao
 
 include("tipos.jl")

@@ -1,12 +1,15 @@
-incert(; u::Real, t::Real) = u*t
+# Funções internas
+_incerteza(; u::Real, t::Real) = u * t
+_incerteza(U::NamedTuple) = _incerteza(; U...)
+_incerteza(U::Real) = U
 
-incert(U::NamedTuple) = incert(;U...)
+const RealOrNamedTuple = Union{Real, NamedTuple}
 
-student(v::Union{Int, Float64}, prob::Float64 = 0.9545) = quantile(TDist(v), 1 - (1-prob)/2)
+# Funções para calculos comuns de Metrologia
+student(v::AbstractIntOrFloat, prob::AbstractFloat = 0.9545) = quantile(TDist(v), 1 - (1-prob)/2)
+student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
 
-student(med::Medicao, prob::Float64 = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
-
-function incerteza(I::Vector, prob::Float64 = 0.9545)
+function incerteza(I::Vector, prob::AbstractFloat = 0.9545)
     v = length(I) - 1
     u = std(I)
     t = student(v, prob)
@@ -14,7 +17,7 @@ function incerteza(I::Vector, prob::Float64 = 0.9545)
     return U
 end
 
-function incerteza(I::Matrix, prob::Float64 = 0.9545)
+function incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
     v = size(I)[1]
     u = [std(I[:, i]) for i in axes(I, 2)]
     t = student(v, prob)
@@ -34,88 +37,67 @@ function correcao(I::Matrix, VV::Vector)
     return C
 end
 
-function medinvar(I::Vector; C::Real = 0, prob::Float64 = 0.9545)
-
+# Funçõs para criar objetos de Medicao
+function mens_invar(I::Vector; C::Real = 0, prob::AbstractFloat = 0.9545)
     I̅ = mean(I)
     n = length(I)
     v = n - 1
     u = std(I)
-    U = u*student(v, prob)
-
+    U = u * student(v, prob)
     return Medicao(RM(I̅ + C, U/√n), v)
 end
 
-# add exemplo com NamedTuple na documentacao para justificar a arquitetura da funcao
-function medinvar(I::Real, U::Union{Real, NamedTuple}; n::Int = 1, C::Real = 0)
-
-    if U isa NamedTuple
-        Uᵥ = incert(U)
-        n == 1 && return RM(I + C, Uᵥ)
-        v = n - 1
-        return Medicao(RM(I + C, Uᵥ/√n), v)
-    end
-
-    n == 1 && return RM(I + C, U)
+function mens_invar(I::Real, U::RealOrNamedTuple; 
+                    n::AbstractIntOrFloat = 1, C::Real = 0)
     v = n - 1
-    return Medicao(RM(I + C, U/√n), v)
+    Uᵥ = _incerteza(U)
+
+    n == 1 && return RM(I + C, Uᵥ)
+
+    return Medicao(RM(I + C, Uᵥ/√n), v)
 end
 
-function medinvar_emax(I::Vector, Emax::Real)
+function mens_invar_emax(I::Vector, Emax::Real)
     I̅ = mean(I)
     v = length(I) - 1
     return Medicao(RM(I̅, Emax), v)
 end
 
-medinvar_emax(I::Real, Emax::Real) = RM(I, Emax)
+mens_invar_emax(I::Real, Emax::Real) = RM(I, Emax)
 
-function medvar(I::Vector; C::Real = 0, prob::Float64 = 0.9545)
-
+function mens_var(I::Vector; C::Real = 0, prob::AbstractFloat = 0.9545)
     I̅ = mean(I)
     v = length(I) - 1
     u = std(I)
     t = student(v, prob)
-    U = u*t
-    
+    U = u * t
     return Medicao(RM(I̅ + C, U), v)
 end
 
-function medvar(I̅::Real, U::Union{Real, NamedTuple};
-        n::Union{Int, Float64} = Inf, C::Real = 0)
-
+function mens_var(I̅::Real, U::RealOrNamedTuple;
+                  n::AbstractIntOrFloat = Inf, C::Real = 0)
     v = n - 1
-    
-    if U isa NamedTuple
-        Uᵥ = incert(U)
-        return Medicao(RM(I̅ + C, Uᵥ), v)
-    end
-    
-    return Medicao(RM(I̅ + C, U), v)
+    Uᵥ = _incerteza(U)
+    return Medicao(RM(I̅ + C, Uᵥ), v)
 end
 
-function medvar_emax(I::Vector, Emax::Real; prob::Float64 = 0.9545)
-
+function mens_var_emax(I::Vector, Emax::Real; prob::AbstractFloat = 0.9545)
     I̅ = mean(I)
     v = length(I) - 1
     u = std(I)
     t = student(v, prob)
-    U = u*t
-    
+    U = u * t
     return Medicao(RM(I̅, U + Emax), v)
 end
 
-function medvar_emax(I̅::Real, U::Union{Real, NamedTuple}, Emax::Real;
-        n::Union{Int, Float64} = Inf)
-
+function mens_var_emax(I̅::Real, U::RealOrNamedTuple, Emax::Real;
+                       n::AbstractIntOrFloat = Inf)
     v = n - 1
-    
-    if U isa NamedTuple
-        Uᵥ = incert(U)
-        return Medicao(RM(I̅, Uᵥ + Emax), v)
-    end
-    
-    return Medicao(RM(I̅, U + Emax), v)
+    Uᵥ = _incerteza(U)
+    return Medicao(RM(I̅, Uᵥ + Emax), v)
 end
 
+# Operações com obejtos de Medicao
 function Base.:+(x::Medicao, y::Medicao)
 
     I = x.RM.I + y.RM.I
@@ -128,15 +110,15 @@ function Base.:+(x::Medicao, y::Medicao)
     
     if u₁ > u₂
         r = u₂/u₁
-        u = u₁*√(1 + r^2)
+        u = u₁ * √(1 + r^2)
     else
         r = u₁/u₂
-        u = u₂*√(1 + r^2)
+        u = u₂ * √(1 + r^2)
     end
     
     v = trunc(u^4/(u₁^4/x.v + u₂^4/y.v))
     t = student(v)
-    U = u*t
+    U = u * t
     
     return Medicao(RM(I, U), v)
 end
@@ -153,15 +135,15 @@ function Base.:-(x::Medicao, y::Medicao)
     
     if u₁ > u₂
         r = u₂/u₁
-        u = u₁*√(1 + r^2)
+        u = u₁ * √(1 + r^2)
     else
         r = u₁/u₂
-        u = u₂*√(1 + r^2)
+        u = u₂ * √(1 + r^2)
     end
     
     v = trunc(u^4/(u₁^4/x.v + u₂^4/y.v))
     t = student(v)
-    U = u*t
+    U = u * t
     
     return Medicao(RM(I, U), v)
 end
@@ -254,7 +236,7 @@ function Base.:^(x::Medicao, y::Real)
     
     I = Iₓ^y
     u = I * √(y^2 * (uₓ/Iₓ)^2)
-    U = u*t
+    U = u * t
     
     return Medicao(RM(I, U), x.v)
 end

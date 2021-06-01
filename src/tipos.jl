@@ -7,26 +7,27 @@ end
 RM(I::Real, U::Real) = RM(float(I), float(U))
 const ± = RM
 
+const AbstractIntOrFloat = Union{Integer, AbstractFloat}
 
-struct Medicao{T<:AbstractFloat}
+struct Medicao{T<:AbstractFloat, S<:AbstractIntOrFloat}
     RM::RM{T}
-    v::Union{T, Int}
+    v::S
 
-    function Medicao{T}(RM::RM{T}, v::Union{T, Int}) where {T<:AbstractFloat}
+    function Medicao{T, S}(RM::RM{T}, v::S) where {T<:AbstractFloat, S<:AbstractIntOrFloat}
 
-        if v < 1
+        if v < one(v)
             throw(ArgumentError("Não é possível criar um objeto Medicao com v < 1."))
         end
 
-        return new{T}(RM, v)
+        return new{T, S}(RM, v)
     end
 end
 
-Medicao(RM::RM{T}, v::Int) where {T<:AbstractFloat} = Medicao{T}(RM, v)
-function Medicao(RM::RM{T}, v::AbstractFloat) where {T<:AbstractFloat}
+Medicao(RM::RM{T}, v::S) where {T<:AbstractFloat, S<:Integer} = Medicao{T, S}(RM, v)
+function Medicao(RM::RM{T}, v::S) where {T<:AbstractFloat, S<:AbstractFloat}
     
     if isinf(v)
-        return Medicao{T}(RM, v)
+        return Medicao{T, S}(RM, v)
     end
     
     return Medicao(RM, trunc(Int, v))

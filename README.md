@@ -10,8 +10,6 @@ Entre no modo Pkg no REPL da Linguagem Julia usando o símbolo de fecha colchete
 
 ## Requerimentos
 - [Linguagem Julia](https://julialang.org/)
-- [Distributions.jl](https://juliastats.org/Distributions.jl/stable/)
-
 
 ## Utilização 
 Você pode utilizar o pacote em qualquer ambiente de desenvolvimento que suporte a Linguagem Julia, seja no próprio REPL do Julia, no VS Code com a extensão da Linguagem Julia, no ambiente de notebook [Pluto.jl](https://github.com/fonsp/Pluto.jl), etc.\
@@ -73,16 +71,16 @@ Exemplo:
 julia> student(4)
 2.8693151696963826
 ```
-#### `medinvar()`
-A função `medinvar` é usada para calcular o resultado de medição de um mensurado invariável. Neste caso duas situações podem ocorrer: `n = 1` e `n > 1`.\
+#### `mens_nvar()`
+A função `mens_invar` é usada para calcular o resultado de medição de um mensurando invariável. Neste caso duas situações podem ocorrer: `n = 1` e `n > 1`.\
 Para `n = 1` a equação para se chegar ao resultado de medição é a seguinte: `RM = I + C ± U`. Vale ressaltar que a incerteza de medição `U` é igual ao produto da incerteza padrão (desvio padrão) `u` multiplicado pelo coeficiente de Student `t`. No caso de apenas uma medição a incerteza de medição deve ser previamente conhecida.\
 No segundo caso, o resultado de medição é calculado pela seguida equação: `RM = I̅ + C  ± U/√n`. Em que I̅ é igual a média das medições realizadas.\
-Sendo assim, a função `medinvar` aceita na sua primeira versão, a indicação I (para o primeiro caso) ou a média das medições I̅ (para o segundo caso) como primeiro argumento posicional e a incerteza de medição U como segundo argumento posicional, caso você tenha os valores de u e t e não queira multiplicar os mesmos, uma tupla nomeada na forma: `(u = 4, t = 2.386)`, pode ser passada como argumento posicional no lugar do valor de U
+Sendo assim, a função `mens_invar` aceita na sua primeira versão, a indicação I (para o primeiro caso) ou a média das medições I̅ (para o segundo caso) como primeiro argumento posicional e a incerteza de medição U como segundo argumento posicional, caso você tenha os valores de u e t e não queira multiplicar os mesmos, uma tupla nomeada na forma: `(u = 4, t = 2.386)`, pode ser passada como argumento posicional no lugar do valor de U
 Os argumentos de palavra-chave dessa função são a correção `C`, que tem valor padrão 0 e portanto é opcional, e para o segundo caso o número de medições realizadas `n`. No primeiro caso a função retorna um objeto `RM`, no segundo retorna um objeto `Medicao`.
 
 Primeiro caso:
 ```julia
-medinvar(I, U; C)
+mens_invar(I, U; C)
 ```
 **Argumentos Posicionais**
 * `I` - Tipo: `Real`
@@ -93,16 +91,16 @@ medinvar(I, U; C)
 
 Exemplos:
 ```julia-repl
-julia> medinvar(4.5, 2.2, C = -0.3)
+julia> mens_invar(4.5, 2.2, C = -0.3)
 4.2 ± 2.2
 
-julia> medinvar(4.5, (u = 1.1, t = 2), C = -0.3)
+julia> mens_invar(4.5, (u = 1.1, t = 2), C = -0.3)
 4.2 ± 2.2
 ```
 \
 Segundo caso:
 ```julia
-medinvar(I̅, U; C, n)
+mens_invar(I̅, U; C, n)
 ```
 **Argumentos Posicionais**
 * `I̅` - Tipo: `Real`
@@ -114,18 +112,18 @@ medinvar(I̅, U; C, n)
 
 Exemplos:
 ```julia-repl
-julia> medinvar(4.5, 2.2, C = -0.3, n = 4)
+julia> mens_invar(4.5, 2.2, C = -0.3, n = 4)
 Medição
 4.2 ± 1.1, v = 3
 
-julia> medinvar(4.5, (u = 1.1, t = 2), C = -0.3, n = 4)
+julia> mens_invar(4.5, (u = 1.1, t = 2), C = -0.3, n = 4)
 Medição
 4.2 ± 1.1, v = 3
 ```
 \
-A segunda versão da função `medinvar` é aplicada apenas para o segundo caso. Nessa versão o único argumento posicional é um vetor contendo todas as medições realizadas. Os argumentos de palavras-chave são a correção `C` que tem vaor padrão 0 e a probabilidade `prob` que tem valor padrão 0.9545, portanto ambos são opcionais:
+A segunda versão da função `mens_invar` é aplicada apenas para o segundo caso. Nessa versão o único argumento posicional é um vetor contendo todas as medições realizadas. Os argumentos de palavras-chave são a correção `C` que tem vaor padrão 0 e a probabilidade `prob` que tem valor padrão 0.9545, portanto ambos são opcionais:
 ```julia
-medinvar(I; C, prob)
+mens_invar(I; C, prob)
 ```
 **Argumentos Posicionais**
 * `I` - Tipo: `Vector`
@@ -144,23 +142,23 @@ julia> I = [4.4, 4.3, 4.7, 4.1, 4.6]
  4.1
  4.6
 
-julia> medinvar(I)
+julia> mens_invar(I)
 Medição
 4.42 ± 0.30636, v = 4
 
-julia> medinvar(I, C = -0.3)
+julia> mens_invar(I, C = -0.3)
 Medição
 4.12 ± 0.30636, v = 4
 
-julia> medinvar(I, C = -0.3, prob = 0.9)
+julia> mens_invar(I, C = -0.3, prob = 0.9)
 Medição
 4.12 ± 0.22762, v = 4
 ```
-#### `medinvar_emax()`
+#### `mens_invar_emax()`
 Para o terceiro caso temos um mensurado invariável e o erro máximo do sistema de medição medição. Nesse caso a equação para uma medição é: `RM = I ± Emax` e para mais de uma medição é : `RM = I̅ ± Emax`.\
 A primeira versão dessa função é muito simples, e simplesmente aceita o valor da única indicação ou da média das indicações como primeiro argumento posicional e o errmo máximo como segundo argumento posicional.
 ```julia
-medinvar_emax(I, Emax)
+mens_invar_emax(I, Emax)
 ```
 **Argumentos Posicionais**
 * `I` - Tipo: `Real`
@@ -168,13 +166,13 @@ medinvar_emax(I, Emax)
 
 Exemplo:
 ```julia-repl
-julia> medinvar_emax(4.7, 0.6)
+julia> mens_invar_emax(4.7, 0.6)
 4.7 ± 0.6
 ```
 \
-Já a segunda versão da função `medinvar_emax` aceita como primeiro argumento posicional um vetor com as medições realizadas e um segundo argumento posicional com o erro máximo.
+Já a segunda versão da função `mens_invar_emax` aceita como primeiro argumento posicional um vetor com as medições realizadas e um segundo argumento posicional com o erro máximo.
 ```julia
-medinvar_emax(I, Emax)
+mens_invar_emax(I, Emax)
 ```
 **Argumentos Posicionais**
 * `I` - Tipo: `Vector`
@@ -190,17 +188,17 @@ julia> I = [4.4, 4.3, 4.7, 4.1, 4.6]
  4.1
  4.6
 
-julia> medinvar_emax(I, 0.6)
+julia> mens_invar_emax(I, 0.6)
 Medição
 4.42 ± 0.6, v = 4
 ```
-#### `medvar()`
+#### `mens_var()`
 O quarto caso refere-se a um mensurando variável em que foram realizadas mais de uma medição. A equação para encontrar o resultado de medição nesse caso é: `RM = I̅ + C ± U`.\
-Na primeira versão da função `medvar` temos a média das indicações como primeiro argumento posicional e a incerteza de medição como segundo argumento posicional, para os argumentos de palavra-chave temos 
-Na primeira versão da função `medvar` temos a média das indicações como primeiro argumento posicional e a incerteza de medição como segundo argumento posicional, para os argumentos de palavra-chave temos 
+Na primeira versão da função `mens_var` temos a média das indicações como primeiro argumento posicional e a incerteza de medição como segundo argumento posicional, para os argumentos de palavra-chave temos 
+Na primeira versão da função `mens_var` temos a média das indicações como primeiro argumento posicional e a incerteza de medição como segundo argumento posicional, para os argumentos de palavra-chave temos 
 a correção `C` que tem valor padrão 0, o número de medições realizadas `n` que tem valor padrão `Inf`.
 ```julia
-medvar(I̅, U; C, n)
+mens_var(I̅, U; C, n)
 ```
 **Argumentos Posicionais**
 * `I̅` - Tipo: `Real`
@@ -212,21 +210,21 @@ medvar(I̅, U; C, n)
 
 Exemplo:
 ```julia-repl
-julia> medvar(4.3, 2.2, C = -0.5, n = 14)
+julia> mens_var(4.3, 2.2, C = -0.5, n = 14)
 Medição
 3.8 ± 2.2, v = 13
 
-julia> medvar(4.3, (u = 1.1, t = 2), C = -0.5, n = 14)
+julia> mens_var(4.3, (u = 1.1, t = 2), C = -0.5, n = 14)
 Medição
 3.8 ± 2.2, v = 13
 
-julia> medvar(4.3, (u = 1.1, t = 2), C = -0.5)
+julia> mens_var(4.3, (u = 1.1, t = 2), C = -0.5)
 Medição
 3.8 ± 2.2, v = Inf
 ```
- A segunda versão da função `medvar` aceita como único argumento posicional um vetor com as medições realizadas, os argumentos de palavra-chave são: a correção `C` que tem valor padrão 0 e a probabilidade `prob` que tem valor padrão de 0.9545.
+ A segunda versão da função `mens_var` aceita como único argumento posicional um vetor com as medições realizadas, os argumentos de palavra-chave são: a correção `C` que tem valor padrão 0 e a probabilidade `prob` que tem valor padrão de 0.9545.
  ```julia
- medvar(I; C, prob)
+ mens_var(I; C, prob)
  ```
  **Argumentos Posicionais**
  * `I` - Tipo: `Vector`
@@ -245,23 +243,23 @@ julia> I = [4.4, 4.3, 4.7, 4.1, 4.6]
  4.1
  4.6
 
-julia> medvar(I)
+julia> mens_var(I)
 Medição
 4.42 ± 0.68504, v = 4
 
-julia> medvar(I, C = -0.2)
+julia> mens_var(I, C = -0.2)
 Medição
 4.22 ± 0.68504, v = 4
 
-julia> medvar(I, C = -0.2, prob = 0.9)
+julia> mens_var(I, C = -0.2, prob = 0.9)
 Medição
 4.22 ± 0.50897, v = 4
 ```
- #### `medvar_emax()`
+ #### `mens_var_emax()`
  Para o quinto caso temos um mensurando variável que foi medido mais de uma vez e o erro máximo do sistema de medição. A equação para encontrar o resultado de medição nesse caso é: `RM = I̅ ± U + Emax`.\
- Na primeira versão da função `medvar_emax`, temos como argumentos posicionais a indicação média, a incerteza da medição e o erro máximo, o único argumento de palavra-chave é o número de medições `n` que tem valor padrão `Inf`.
+ Na primeira versão da função `mens_var_emax`, temos como argumentos posicionais a indicação média, a incerteza da medição e o erro máximo, o único argumento de palavra-chave é o número de medições `n` que tem valor padrão `Inf`.
  ```julia
- medvar_emax(I̅, U, Emax; n)
+ mens_var_emax(I̅, U, Emax; n)
  ```
  **Argumentos Posicionais**
  * `I̅` - Tipo: `Real`
@@ -273,22 +271,22 @@ Medição
 
 Exemplo:
 ```julia-repl
-julia>  medvar_emax(4.42, 0.67, 1.4, n = 40)
+julia>  mens_var_emax(4.42, 0.67, 1.4, n = 40)
 Medição
 4.42 ± 2.07, v = 39
 
-julia>  medvar_emax(4.42, (u = 0.2, t = 2), 1.4, n = 40)
+julia>  mens_var_emax(4.42, (u = 0.2, t = 2), 1.4, n = 40)
 Medição
 4.42 ± 1.8, v = 39
 
-julia>  medvar_emax(4.42, (u = 0.2, t = 2), 1.4)
+julia>  mens_var_emax(4.42, (u = 0.2, t = 2), 1.4)
 Medição
 4.42 ± 1.8, v = Inf
 ```
 \
-A segunda versão da função `medvar_emax` é um pouco mais prática e aceita como primeiro argumento posicional um vetor contendo todas as medições realizadas e como segundo argumento posicional o erro máximo, o único argumento de palavra-chave é a probabilidade `prob` que tem valor padrão de 0.9545.
+A segunda versão da função `mens_var_emax` é um pouco mais prática e aceita como primeiro argumento posicional um vetor contendo todas as medições realizadas e como segundo argumento posicional o erro máximo, o único argumento de palavra-chave é a probabilidade `prob` que tem valor padrão de 0.9545.
 ```julia
-medvar_emax(I, Emax; prob)
+mens_var_emax(I, Emax; prob)
 ```
 **Argumentos Posicionais**
 * `I` - Tipo: `Vector`
@@ -307,11 +305,11 @@ julia> I = [4.4, 4.3, 4.7, 4.1, 4.6]
  4.1
  4.6
 
-julia> medvar_emax(I, 1.6)
+julia> mens_var_emax(I, 1.6)
 Medição
 4.42 ± 2.28504, v = 4
 
-julia> medvar_emax(I, 1.6, prob = 0.92)
+julia> mens_var_emax(I, 1.6, prob = 0.92)
 Medição
 4.42 ± 2.15697, v = 4
 ```

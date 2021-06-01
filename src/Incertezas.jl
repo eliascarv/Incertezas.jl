@@ -1,6 +1,5 @@
 module Incertezas
 
-using Base: Integer, AbstractFloat, NamedTuple
 using Distributions
 
 export RM, Medicao, ± 

@@ -63,8 +63,8 @@ A primeira função que será a função `student`, a mesma retorna o coeficient
 student(v, prob) 
 ```
 **Argumentos Posicionais**
-* `v` - Tipo: `Int`; v ≥ 0; v pode ser `Inf`
-* `prob` - Tipo: `Float`; 1 ≥ prob ≥ 0; Valor Padrão: `0.9545`
+* `v` : `Tipo: Int | v ≥ 0 | v pode ser Inf`
+* `prob` : `Tipo: Float | 1 ≥ prob ≥ 0 | Valor Padrão: 0.9545`
 
 Exemplo:
 ```julia-repl
@@ -83,11 +83,11 @@ Primeiro caso:
 mens_invar(I, U; C)
 ```
 **Argumentos Posicionais**
-* `I` - Tipo: `Real`
-* `U` - Tipo: `Real` ou `NamedTuple`
+* `I` : `Tipo: Real`
+* `U` : `Tipo: Real ou NamedTuple`
 
 **Argumentos de Palavra-chave**
-* `C` - Tipo: `Real`; Valor Padrão: 0
+* `C` : `Tipo: Real | Valor Padrão: 0`
 
 Exemplos:
 ```julia-repl
@@ -103,12 +103,12 @@ Segundo caso:
 mens_invar(I̅, U; C, n)
 ```
 **Argumentos Posicionais**
-* `I̅` - Tipo: `Real`
-* `U` - Tipo: `Real` ou NamedTuple
+* `I̅` : `Tipo: Real`
+* `U` : `Tipo: Real ou NamedTuple`
 
 **Argumentos de Palavra-chave**
-* `C` - Tipo: `Real`; Valor Padrão: 0
-* `n` - Tipo: `Int`, se for pssado um Float ele será truncado; Aceita `Inf`
+* `C` - `Tipo: Real | Valor Padrão: 0`
+* `n` - `Tipo: Int | se for passado um Float ele será truncado | Aceita Inf`
 
 Exemplos:
 ```julia-repl
@@ -126,11 +126,11 @@ A segunda versão da função `mens_invar` é aplicada apenas para o segundo cas
 mens_invar(I; C, prob)
 ```
 **Argumentos Posicionais**
-* `I` - Tipo: `Vector`
+* `I` : `Tipo: Vector`
 
 **Argumentos de Palavra-chave**
-* `C` - Tipo: `Real`; Valor Padrão: 0
-* `prob` - Tipo: `Float`; Valor Padrão: 0.9545
+* `C` : `Tipo: Real | Valor Padrão: 0`
+* `prob` : `Tipo: Float | Valor Padrão: 0.9545`
 
 Exemplos:
 ```julia-repl
@@ -161,8 +161,8 @@ A primeira versão dessa função é muito simples, e simplesmente aceita o valo
 mens_invar_emax(I, Emax)
 ```
 **Argumentos Posicionais**
-* `I` - Tipo: `Real`
-*  `Emax` - Tipo: `Real`
+* `I` : `Tipo: Real`
+* `Emax` : `Tipo: Real`
 
 Exemplo:
 ```julia-repl
@@ -175,8 +175,8 @@ Já a segunda versão da função `mens_invar_emax` aceita como primeiro argumen
 mens_invar_emax(I, Emax)
 ```
 **Argumentos Posicionais**
-* `I` - Tipo: `Vector`
-* `Emax` - Tipo: `Real`
+* `I` : `Tipo: Vector`
+* `Emax` : `Tipo: Real`
 
 Exemplo:
 ```julia-repl
@@ -201,12 +201,12 @@ a correção `C` que tem valor padrão 0, o número de medições realizadas `n`
 mens_var(I̅, U; C, n)
 ```
 **Argumentos Posicionais**
-* `I̅` - Tipo: `Real`
-* `U` - Tipo: `Real` ou `NamedTuple`
+* `I̅` : `Tipo: Real`
+* `U` : `Tipo: Real ou NamedTuple`
 
 **Argumentos de Palavra-chave**
-* `C` - Tipo `Real`; Valor Padrão: 0
-* `n` - Tipo `Int`; Valor Padrão: `Inf`
+* `C` : `Tipo Real | Valor Padrão: 0`
+* `n` : `Tipo Int | Valor Padrão: Inf`
 
 Exemplo:
 ```julia-repl
@@ -227,11 +227,11 @@ Medição
  mens_var(I; C, prob)
  ```
  **Argumentos Posicionais**
- * `I` - Tipo: `Vector`
+ * `I` : `Tipo: Vector`
  
 **Argumentos de Palavra-chave**
-* `C` - Tipo: `Real`; Valor Padrão 0
-* `prob` - Tipo: `Float`; Valor Padrão 0.9545
+* `C` : `Tipo: Real | Valor Padrão 0`
+* `prob` : `Tipo: Float | Valor Padrão 0.9545`
 
 Exemplo:
 ```julia-repl
@@ -262,12 +262,12 @@ Medição
  mens_var_emax(I̅, U, Emax; n)
  ```
  **Argumentos Posicionais**
- * `I̅` - Tipo: `Real`
- * `U` - Tipo: `Real` ou `NamedTuple`
- * `Emax` - Tipo: `Real`
+ * `I̅` : `Tipo: Real`
+ * `U` : `Tipo: Real ou NamedTuple`
+ * `Emax` : `Tipo: Real`
  
 **Argumentos de Palavra-chave**
-* `n` - Tipo: `Int`; Valor Padrão `Inf`
+* `n` : `Tipo: Int | Valor Padrão Inf`
 
 Exemplo:
 ```julia-repl
@@ -289,11 +289,11 @@ A segunda versão da função `mens_var_emax` é um pouco mais prática e aceita
 mens_var_emax(I, Emax; prob)
 ```
 **Argumentos Posicionais**
-* `I` - Tipo: `Vector`
-* `Emxa` - Tipo: `Real`
+* `I` : `Tipo: Vector`
+* `Emxa` : `Tipo: Real`
 
 **Argumentos de Palavra-chave**
-* `prob` - Tipo: `Float`; Valor Padrão 0.9545
+* `prob` : `Tipo: Float | Valor Padrão 0.9545`
 
 Exemplo:
 ```julia-repl

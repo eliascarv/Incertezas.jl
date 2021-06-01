@@ -64,7 +64,7 @@ student(v, prob)
 ```
 **Argumentos Posicionais**
 * `v` - Tipo: `Int`; v ≥ 0; v pode ser `Inf`
-* `prob` - Tipo: `Float`; 1 ≥ prob ≥ 0; Valor Padrão: 0.9545`
+* `prob` - Tipo: `Float`; 1 ≥ prob ≥ 0; Valor Padrão: `0.9545`
 
 Exemplo:
 ```julia-repl

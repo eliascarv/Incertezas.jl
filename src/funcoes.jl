@@ -18,7 +18,7 @@ function incerteza(I::Vector, prob::AbstractFloat = 0.9545)
 end
 
 function incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
-    v = size(I)[1]
+    v = size(I, 1) - 1
     u = [std(I[:, i]) for i in axes(I, 2)]
     t = student(v, prob)
     U = u * t

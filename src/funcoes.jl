@@ -8,7 +8,44 @@ const RealOrNamedTuple = Union{Real, NamedTuple}
 # Funções para calculos comuns de Metrologia
 student(v::AbstractIntOrFloat, prob::AbstractFloat = 0.9545) = quantile(TDist(v), 1 - (1-prob)/2)
 student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
+"""
 
+    incerteza(I::Vector, prob::AbstractFloat = 0.9545)
+
+Calcula a incerteza de medição de um vetor de indicações.
+
+
+    incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
+
+Calcula a incerteza de mdeição para cada coluna de uma matriz, retornando
+um vetor com cada incerteza. Ex:
+
+```jldoctest
+julia> I = rand(4)
+4-element Vector{Float64}:
+ 0.4208994737862477
+ 0.3377616070219951
+ 0.46985105150020456
+ 0.9339224640544577
+
+julia> incerteza(I)
+0.885628905821176
+
+julia> I = rand(4, 4)
+4×4 Matrix{Float64}:
+ 0.723973   0.782779  0.196474  0.863371
+ 0.0975783  0.032279  0.914111  0.727987
+ 0.664777   0.761189  0.878717  0.216146
+ 0.0799416  0.272497  0.981025  0.634128
+
+julia> incerteza(I)
+4-element Vector{Float64}:
+ 1.1592427510559653
+ 1.226925516574539
+ 1.2120694557110712
+ 0.9231919779939417
+```
+"""
 function incerteza(I::Vector, prob::AbstractFloat = 0.9545)
     v = length(I) - 1
     u = std(I)

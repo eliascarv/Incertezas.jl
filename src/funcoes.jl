@@ -15,7 +15,6 @@ student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 -
 
 Calcula a incerteza de medição de um vetor de indicações.
 
-
     incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
 
 Calcula a incerteza de medição para cada coluna de uma matriz

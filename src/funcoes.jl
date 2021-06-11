@@ -17,8 +17,8 @@ Calcula a incerteza de medição de um vetor de indicações.
 
     incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
 
-Calcula a incerteza de mdeição para cada coluna de uma matriz, retornando
-um vetor com cada incerteza. Ex:
+Calcula a incerteza de medição para cada coluna de uma matriz, retornando
+um vetor com as respectivas incertezas. Ex:
 
 ```jldoctest
 julia> I = rand(4)

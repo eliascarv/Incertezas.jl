@@ -10,7 +10,6 @@ student(v::AbstractIntOrFloat, prob::AbstractFloat = 0.9545) = quantile(TDist(v)
 student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
 
 """
-
     incerteza(I::Vector, prob::AbstractFloat = 0.9545)
 
 Calcula a incerteza de medição de um vetor de indicações.
@@ -19,8 +18,9 @@ Calcula a incerteza de medição de um vetor de indicações.
 
 Calcula a incerteza de medição para cada coluna de uma matriz
 (no caso cada coluna seria uma observação diferente), retornando
-um vetor com as respectivas incertezas. Ex:
+um vetor com as respectivas incertezas. 
 
+# Exemplos
 ```jldoctest
 julia> I = rand(4)
 4-element Vector{Float64}:

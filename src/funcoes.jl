@@ -6,6 +6,36 @@ _incerteza(U::Real) = U
 const RealOrNamedTuple = Union{Real, NamedTuple}
 
 # Funções para calculos comuns de Metrologia
+
+"""
+    student(v::AbstractIntOrFloat, prob::AbstractFloat = 0.9545)
+
+Calcula o índice t de Student para v graus de liberdade.
+O argumento v pode ser um número inteiro ou um Inf.
+Se for passdo um número Float ele será truncado.
+
+    student(med::Medicao, prob::AbstractFloat = 0.9545)
+
+Calcula o índice t de Student para um objeto de medição.
+Como todas as funções desse pacote, a probabilidade tem valor
+padrão de 0.9545, o que não impede que seja passdo um valor diferente. 
+
+# Exemplos
+```jldoctest
+julia> student(50)
+2.0512507818518815
+
+julia> student(50, 0.95)
+2.0085591121007607
+
+julia> m = Medicao(15.4 ± 0.85, 50)
+Medição 
+15.4 ± 0.85, v = 50
+
+julia> student(m, 0.9)
+1.675905025163097
+```
+"""
 student(v::AbstractIntOrFloat, prob::AbstractFloat = 0.9545) = quantile(TDist(v), 1 - (1-prob)/2)
 student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 - (1-prob)/2)
 
@@ -13,6 +43,7 @@ student(med::Medicao, prob::AbstractFloat = 0.9545) = quantile(TDist(med.v), 1 -
     incerteza(I::Vector, prob::AbstractFloat = 0.9545)
 
 Calcula a incerteza de medição de um vetor de indicações.
+O valor padrão para a probabilidade é de 0.9545.
 
     incerteza(I::Matrix, prob::AbstractFloat = 0.9545)
 
